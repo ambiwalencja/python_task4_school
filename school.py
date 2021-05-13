@@ -3,7 +3,7 @@ dict_of_students = {}  # global dictionary of students
 dict_of_teachers = {}  # global dict of all teachers
 dict_of_tutors = {}  # -//- tutors
 
-# classes for all our types of objects: roles and groups:
+# classes for all our types of objects: roles and groups.
 
 
 class Group:  # school class: matching tutor is found in tutors' attributes, students are found in students' attr.
@@ -64,6 +64,23 @@ class Teacher:  # teacher: subject and groups are given by the user, tutors are 
         dict_of_teachers[self.name] = {"subject": self.subject, "groups": self.groups}
 
 
+def get_person_data(local_role):
+    local_name = input("Type name: ")
+    if local_role == 'student':  # for student we only need to get group and finished.
+        local_group = input("Type group: ")
+        return Student(local_name, local_group)
+    elif local_role == 'teacher':  # for teacher we need a subject, the rest is the same for tutor and teacher
+        local_subject = input("Type subject: ")
+    local_groups = []
+    local_group = input("Type group: ")
+    while local_group:  # we keep asking for next group until the user types enter
+        local_groups.append(local_group)
+        local_group = input("Type next group: ")
+    if local_role == 'teacher':
+        return Teacher(local_name, local_subject, local_groups)
+    return Tutor(local_name, local_groups)
+
+
 while True:
     role = input("Type a role: ")
     if role not in ALLOWED_COMMANDS:
@@ -72,12 +89,12 @@ while True:
     if role == "stop":
         break
     elif role == "student":
-        name = input("Type name: ")
-        group = input("Type group: ")
-        student_object = Student(name, group)  # we create an object of a class Student with given params
+        student_object = get_person_data(role)  # we create an object of a class Student with given params
         student_object.add_student()  # and we add it to the dictionary
         print(dict_of_students)
     elif role == "tutor":
+        # i would like to put this into a function/method? which is better here? I guess global function
+        """
         name = input("Type name: ")
         groups = []
         group = input("Type group: ")
@@ -86,8 +103,12 @@ while True:
             group = input("Type next group: ")
         tutor_object = Tutor(name, groups)
         tutor_object.add_tutor()
+        """
+        tutor_object = get_person_data(role)
+        tutor_object.add_tutor()
         print(dict_of_tutors)
     elif role == "teacher":
+        """
         name = input("Type name: ")
         subject = input("Type subject: ")
         groups = []
@@ -96,6 +117,9 @@ while True:
             groups.append(group)
             group = input("Type next group: ")
         teacher_object = Teacher(name, subject, groups)
+        teacher_object.add_teacher()
+        """
+        teacher_object = get_person_data(role)
         teacher_object.add_teacher()
         print(dict_of_teachers)
 
