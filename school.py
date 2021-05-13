@@ -96,3 +96,17 @@ while True:
 # <teacher_name>: tutors of all classes, the teacher has classes with
 # <student_name>: all subjects and their teachers
 
+
+print("Next action: type a name of a person (student, tutor or teacher) or a name of a class"
+      "to get information.")
+phrase = input("Type person's name: ")
+while phrase:
+    if phrase in dict_of_students:
+        print("a student")
+    elif phrase in dict_of_tutors:
+        print("a tutor")
+    elif phrase in dict_of_teachers:
+        print('a teacher')
+    else:
+        print("a class")
+    phrase = input("Type person's name: ")
