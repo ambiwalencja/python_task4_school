@@ -3,25 +3,27 @@ dict_of_students = {}  # global dictionary of students
 dict_of_teachers = {}  # global dict of all teachers
 dict_of_tutors = {}  # -//- tutors
 
+# classes for all our types of objects: roles and groups:
 
-class Group:  # school class
-    def __init__(self, st):
-        self.tutor = ''  # co tutaj, jeśli klasa ma wstępie może mieć pustego wychowawcę, a potem nadanego?
-        self.students = st  # list of students in the class
 
-    def add_student(self, new_student):  # new_student comes from input
+class Group:  # school class: matching tutor is found in tutors' attributes, students are found in students' attr.
+    def __init__(self):
+        self.tutor = ''  # tutor's name - i will add it later if i can (?)
+        self.students = []  # list of students in the class - i hope i can modify this list later
+
+    def add_student(self, new_student):  # new_student comes from dict of students.
         self.students.append(new_student)
 
-    def print_students(self):  # prints all students from the class
+    def print_students(self):  # prints all students from the class - we need to print keys of dicts!
         for student in self.students:
-            print(student)
+            print(student)  # as well as i remember, this prints keys by default?
 
 
-class Student:
+class Student:  # student: group given by user, subjects is found in teacher's attributes
     def __init__(self, nm, grp):
         self.group = grp
         self.name = nm
-        self.subjects = []  # co tutaj, jeśli chcę, żeby domyślnie była to pusta lista, ale potem chcę ją móc wypełniać
+        self.subjects = []
 
     def add_student(self):
         dict_of_students[self.name] = {"group": self.group}  # each student is a key-value pair,
@@ -36,23 +38,22 @@ class Student:
 #      return student_data
 
 
-class Tutor:
-    def __init__(self, grps, nm):
-        self.groups = grps
+class Tutor:  # tutor: groups are given by the user, students will be found in group's attributes
+    def __init__(self, nm, grps):
         self.name = nm
+        self.groups = grps
 
-    def data(self):
-        tutor_data = {self.name: {"groups": self.groups}}
-        return tutor_data
+    def add_tutor(self):
+        dict_of_tutors[self.name] = {"groups": self.groups}
 
     # def add_student(self):
     # dict_of_students[self.name] = {"group": self.group}
 
 
-class Teacher:
-    def __init__(self, sb, nm, grps):
-        self.subject = sb
+class Teacher:  # teacher: subject and groups are given by the user, tutors are found in groups' attributes.
+    def __init__(self, nm, sb, grps):
         self.name = nm
+        self.subject = sb
         self.groups = grps
 
     # def data(self):
@@ -60,28 +61,33 @@ class Teacher:
         # return teacher_data
 
     def add_teacher(self):
-        dict_of_teachers[self.name] = {"subject": self.subject, "group": self.groups}
+        dict_of_teachers[self.name] = {"subject": self.subject, "groups": self.groups}
 
 
 while True:
-    user = input("Type a user: ")
-    if user not in ALLOWED_COMMANDS:
+    role = input("Type a role: ")
+    if role not in ALLOWED_COMMANDS:
         print(f"allowed commands are: {ALLOWED_COMMANDS}")
         continue
-    if user == "stop":
+    if role == "stop":
         break
-    if user == "student":
+    elif role == "student":
         name = input("Type name: ")
         group = input("Type group: ")
-        # subjects = []
-        # subject = input("Type subject: ")
-        # while subject:
-        # ####subjects.append(subject)
-        # ####subject = input("Type next subject: ")
         student_object = Student(name, group)  # we create an object of a class Student with given params
         student_object.add_student()  # and we add it to the dictionary
         print(dict_of_students)
-    if user == "teacher":
+    elif role == "tutor":
+        name = input("Type name: ")
+        groups = []
+        group = input("Type group: ")
+        while group:
+            groups.append(group)
+            group = input("Type next group: ")
+        tutor_object = Tutor(name, groups)
+        tutor_object.add_tutor()
+        print(dict_of_tutors)
+    elif role == "teacher":
         name = input("Type name: ")
         subject = input("Type subject: ")
         groups = []
@@ -93,5 +99,13 @@ while True:
         teacher_object.add_teacher()
         print(dict_of_teachers)
 
+
 # po wprowadzeniu wszystkich danych dokonujemy wszystkich niezbędnych uzupełnień?
 # czy to niepotrzebne i dopiero robimy to, jak nam użytkownik każde? chyba to drugie.
+
+# next the program will get a phrase and print results according to following scheme:
+# <group_name>: tutor and students
+# <tutor_name>: students of all tutor's groups
+# <teacher_name>: tutors of all classes, the teacher has classes with
+# <student_name>: all subjects and their teachers
+
