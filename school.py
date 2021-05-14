@@ -2,14 +2,16 @@ ALLOWED_COMMANDS = ("student", "teacher", "tutor", "stop")
 dict_of_students = {}  # global dictionary of students
 dict_of_teachers = {}  # global dict of all teachers
 dict_of_tutors = {}  # -//- tutors
+dict_of_groups = {}
 
 # classes for all our types of objects: roles and groups.
 
 
 class Group:  # school class: matching tutor is found in tutors' attributes, students are found in students' attr.
     def __init__(self):
-        self.tutor = ''  # tutor's name - i will add it later if i can (?)
-        self.students = []  # list of students in the class - i hope i can modify this list later
+        self.tutor = ''
+        self.students = []
+        self.subjects = {}  # key - subject, value - teacher
 
     def add_student(self, new_student):  # new_student comes from dict of students.
         self.students.append(new_student)
@@ -20,17 +22,25 @@ class Group:  # school class: matching tutor is found in tutors' attributes, stu
 
 
 class Student:  # student: group given by user, subjects is found in teacher's attributes
-    def __init__(self, nm, grp):
-        self.group = grp
-        self.name = nm
-        self.subjects = []
+    def __init__(self):
+        self.group = ''
+        self.name = ''
 
-    def add_student(self):
+    def get_person_data(self):
+        self.name = input("Type name: ")
+        self.group = input("Type group: ")
+
+    def add_person(self):
         dict_of_students[self.name] = {"group": self.group}  # each student is a key-value pair,
         # and the value is another dict with one key - group.
+        if self.group not in dict_of_groups:
+            dict_of_groups[self.group] = Group()
+        dict_of_groups[self.group].add_student(self)
 
-    def add_subjects(self):
-        pass
+    def print_person_data(self):
+        group = dict_of_groups[self.group]
+        for subject, teacher in group.subjects.items():
+            print(subject, teacher.name)  # teacher is an object
 
 
 class Tutor:  # tutor: groups are given by the user, students will be found in group's attributes
@@ -43,21 +53,26 @@ class Tutor:  # tutor: groups are given by the user, students will be found in g
 
 
 class Teacher:  # teacher: subject and groups are given by the user, tutors are found in groups' attributes.
-    def __init__(self, nm, sb, grps):
-        self.name = nm
-        self.subject = sb
-        self.groups = grps
+    def __init__(self):
+        self.name = ''
+        self.subject = ''
+        self.groups = []
 
-    def add_teacher(self):
+    def get_person_data(self):
+        self.name = input("Type name: ")
+        self.subject = input("Type subject: ")
+        local_group = input("Type group: ")
+        while local_group:  # we keep asking for next group until the user types enter
+            self.groups.append(local_group)
+            local_group = input("Type next group: ")
+
+    def add_person(self):
         dict_of_teachers[self.name] = {"subject": self.subject, "groups": self.groups}
 
-
+"""
 def get_person_data(local_role):
     local_name = input("Type name: ")
-    if local_role == 'student':  # for student we only need to get group and finished.
-        local_group = input("Type group: ")
-        return Student(local_name, local_group)
-    elif local_role == 'teacher':  # for teacher we need a subject, the rest is the same for tutor and teacher
+    if local_role == 'teacher':  # for teacher we need a subject, the rest is the same for tutor and teacher
         local_subject = input("Type subject: ")
     local_groups = []
     local_group = input("Type group: ")
@@ -67,7 +82,7 @@ def get_person_data(local_role):
     if local_role == 'teacher':
         return Teacher(local_name, local_subject, local_groups)
     return Tutor(local_name, local_groups)
-
+"""
 
 while True:
     role = input("Type a role: ")
@@ -76,19 +91,20 @@ while True:
         continue
     if role == "stop":
         break
-    elif role == "student":
-        student_object = get_person_data(role)  # we create an object of a class Student with given params
-        student_object.add_student()  # and we add it to the dictionary
-        print(dict_of_students)
+    if role == "student":
+        person_object = Student()  # we create an object of a class Student with given params
+        """
     elif role == "tutor":
         tutor_object = get_person_data(role)
         tutor_object.add_tutor()
         print(dict_of_tutors)
+        """
     elif role == "teacher":
-        teacher_object = get_person_data(role)
-        teacher_object.add_teacher()
-        print(dict_of_teachers)
-
+        person_object = Teacher()  # we create an object of a class Student with given params
+    person_object.get_person_data()  # and we add it to the dictionary
+    person_object.add_person()
+    print(dict_of_students)
+    print(dict_of_teachers)
 
 # next the program will get a phrase and print results according to following scheme:
 # <group_name>: tutor and students
@@ -102,6 +118,7 @@ print("Next action: type a name of a person (student, tutor or teacher) or a nam
 phrase = input("Type person's name: ")
 while phrase:
     if phrase in dict_of_students:
+        
         print("a student")
     elif phrase in dict_of_tutors:
         print("a tutor")
