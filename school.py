@@ -44,11 +44,18 @@ class Student:  # student: group given by user, subjects is found in teacher's a
 
 
 class Tutor:  # tutor: groups are given by the user, students will be found in group's attributes
-    def __init__(self, nm, grps):
-        self.name = nm
-        self.groups = grps
+    def __init__(self):
+        self.name = ''
+        self.groups = []
 
-    def add_tutor(self):
+    def get_person_data(self):
+        self.name = input("Type name: ")
+        local_group = input("Type group: ")
+        while local_group:  # we keep asking for next group until the user types enter
+            self.groups.append(local_group)
+            local_group = input("Type next group: ")
+
+    def add_person(self):
         dict_of_tutors[self.name] = {"groups": self.groups}
 
 
@@ -69,20 +76,6 @@ class Teacher:  # teacher: subject and groups are given by the user, tutors are 
     def add_person(self):
         dict_of_teachers[self.name] = {"subject": self.subject, "groups": self.groups}
 
-"""
-def get_person_data(local_role):
-    local_name = input("Type name: ")
-    if local_role == 'teacher':  # for teacher we need a subject, the rest is the same for tutor and teacher
-        local_subject = input("Type subject: ")
-    local_groups = []
-    local_group = input("Type group: ")
-    while local_group:  # we keep asking for next group until the user types enter
-        local_groups.append(local_group)
-        local_group = input("Type next group: ")
-    if local_role == 'teacher':
-        return Teacher(local_name, local_subject, local_groups)
-    return Tutor(local_name, local_groups)
-"""
 
 while True:
     role = input("Type a role: ")
@@ -92,15 +85,11 @@ while True:
     if role == "stop":
         break
     if role == "student":
-        person_object = Student()  # we create an object of a class Student with given params
-        """
+        person_object = Student()
     elif role == "tutor":
-        tutor_object = get_person_data(role)
-        tutor_object.add_tutor()
-        print(dict_of_tutors)
-        """
+        person_object = Tutor()
     elif role == "teacher":
-        person_object = Teacher()  # we create an object of a class Student with given params
+        person_object = Teacher()
     person_object.get_person_data()  # and we add it to the dictionary
     person_object.add_person()
     print(dict_of_students)
@@ -127,3 +116,4 @@ while phrase:
     else:
         print("a class")
     phrase = input("Type person's name: ")
+    
