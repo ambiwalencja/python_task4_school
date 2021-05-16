@@ -10,18 +10,20 @@ dict_of_groups = {}
 class Group:  # school class: matching tutor is found in tutors' attributes, students are found in students' attr.
     def __init__(self):
         self.tutor = ''
-        self.students = []
+        self.students = []  # is it a list of objects of a class Student ?
         self.subjects = {}  # key - subject, value - teacher
 
-    def add_student(self, new_student):  # new_student comes from dict of students.
+    def add_student(self, new_student):  # new_student comes from input and it is an object of a class Student.
         self.students.append(new_student)
 
-    def print_students(self):  # prints all students from the class - we need to print keys of dicts!
+    def print_group_info(self):  # AND HERE
+        print(f'Group tutor is: {self.tutor} \n'
+              f'Students:')
         for student in self.students:
-            print(student)  # as well as i remember, this prints keys by default?
+            print(student.name)
 
 
-class Student:  # student: group given by user, subjects is found in teacher's attributes
+class Student:  # student: group given by user, subject is found in teacher's attributes
     def __init__(self):
         self.group = ''
         self.name = ''
@@ -34,7 +36,8 @@ class Student:  # student: group given by user, subjects is found in teacher's a
         dict_of_students[self.name] = {"group": self.group}  # each student is a key-value pair,
         # and the value is another dict with one key - group.
         if self.group not in dict_of_groups:
-            dict_of_groups[self.group] = Group()
+            dict_of_groups[self.group] = Group()  # this will be the first element in our dict: its key is
+            # this student's group name and its value is an object of a class Group.
         dict_of_groups[self.group].add_student(self)
 
     def print_person_data(self):
@@ -53,6 +56,9 @@ class Tutor:  # tutor: groups are given by the user, students will be found in g
         local_group = input("Type group: ")
         while local_group:  # we keep asking for next group until the user types enter
             self.groups.append(local_group)
+            if local_group not in dict_of_groups:
+                dict_of_groups[local_group] = Group()
+            dict_of_groups[local_group].tutor = self.name  # we assign this tutor to this group
             local_group = input("Type next group: ")
 
     def add_person(self):
@@ -71,10 +77,17 @@ class Teacher:  # teacher: subject and groups are given by the user, tutors are 
         local_group = input("Type group: ")
         while local_group:  # we keep asking for next group until the user types enter
             self.groups.append(local_group)
+            if local_group not in dict_of_groups:
+                dict_of_groups[local_group] = Group()
+            dict_of_groups[local_group].subjects[self.subject] = self.name  # inside the dict of groups, under the key
+            # name of current group, i have a Group object, & i add items to its attribute, which is the dict with
+            # subjects (k) and teachers (v)
             local_group = input("Type next group: ")
 
     def add_person(self):
         dict_of_teachers[self.name] = {"subject": self.subject, "groups": self.groups}
+
+# first step - we enter the data
 
 
 while True:
@@ -84,36 +97,30 @@ while True:
         continue
     if role == "stop":
         break
-    if role == "student":
+    elif role == "student":
         person_object = Student()
     elif role == "tutor":
         person_object = Tutor()
     elif role == "teacher":
         person_object = Teacher()
-    person_object.get_person_data()  # and we add it to the dictionary
+    person_object.get_person_data()
     person_object.add_person()
-    print(dict_of_students)
-    print(dict_of_teachers)
-
-# next the program will get a phrase and print results according to following scheme:
-# <group_name>: tutor and students
-# <tutor_name>: students of all tutor's groups
-# <teacher_name>: tutors of all classes, the teacher has classes with
-# <student_name>: all subjects and their teachers
+    print(f'Students: {dict_of_students}')
+    print(f'Teachers: {dict_of_teachers}')
+    print(f'Tutors: {dict_of_tutors}')
+    # print(f'Groups: {dict_of_groups}')
 
 
-print("Next action: type a name of a person (student, tutor or teacher) or a name of a class"
-      "to get information.")
-phrase = input("Type person's name: ")
+# step two
+print("Next action: type a name of a person (student, tutor or teacher) or a name of a class to get information.")
+phrase = input("Type person or group name: ")
 while phrase:
-    if phrase in dict_of_students:
-        
+    if phrase in dict_of_students:  # <student_name>: all subjects and their teachers
         print("a student")
-    elif phrase in dict_of_tutors:
+    elif phrase in dict_of_tutors:  # <tutor_name>: students of all tutor's groups
         print("a tutor")
-    elif phrase in dict_of_teachers:
+    elif phrase in dict_of_teachers:  # <teacher_name>: tutors of all classes, the teacher has classes with
         print('a teacher')
-    else:
-        print("a class")
+    elif phrase in dict_of_groups:  # <group_name>: tutor and students
+        dict_of_groups[phrase].print_group_info()  # HERE
     phrase = input("Type person's name: ")
-    
