@@ -1,10 +1,5 @@
 ALLOWED_COMMANDS = ("student", "teacher", "tutor", "stop")
-dict_of_students = {}  # global dictionary of students --------> IS IT BETTER TO KEEP DICTIONARIES HERE THAN OBJECTS?
-# should objects of my classes be created just of operations? why do I keep my information in dicts and not in objects?
-dict_of_teachers = {}  # global dict of all teachers
-dict_of_tutors = {}  # -//- tutors
-dict_of_groups = {}
-
+dict_of_elements = {}
 # classes for all our types of objects: roles and groups.
 
 
@@ -34,14 +29,14 @@ class Student:  # student: group given by user, subject is found in teacher's at
         self.group = input("Type group: ")
 
     def add_person(self):
-        dict_of_students[self.name] = self
-        if self.group not in dict_of_groups:
-            dict_of_groups[self.group] = Group()  # this will be the first element in our dict: its key is
+        dict_of_elements[self.name] = self
+        if self.group not in dict_of_elements:
+            dict_of_elements[self.group] = Group()  # this will be the first element in our dict: its key is
             # this student's group name and its value is an object of a class Group.
-        dict_of_groups[self.group].add_student(self)
+        dict_of_elements[self.group].add_student(self)
 
     def print_info(self):
-        group = dict_of_groups[self.group]
+        group = dict_of_elements[self.group]
         for subject, teacher in group.subjects.items():
             print(subject, teacher.name)  # teacher is an object
 
@@ -56,13 +51,13 @@ class Tutor:  # tutor: groups are given by the user, students will be found in g
         local_group = input("Type group: ")
         while local_group:  # we keep asking for next group until the user types enter
             self.groups.append(local_group)
-            if local_group not in dict_of_groups:
-                dict_of_groups[local_group] = Group()
-            dict_of_groups[local_group].tutor = self.name  # we assign this tutor to this group
+            if local_group not in dict_of_elements:
+                dict_of_elements[local_group] = Group()
+            dict_of_elements[local_group].tutor = self.name  # we assign this tutor to this group
             local_group = input("Type next group: ")
 
     def add_person(self):
-        dict_of_tutors[self.name] = self
+        dict_of_elements[self.name] = self
 
 
 class Teacher:  # teacher: subject and groups are given by the user, tutors are found in groups' attributes.
@@ -77,13 +72,13 @@ class Teacher:  # teacher: subject and groups are given by the user, tutors are 
         local_group = input("Type group: ")
         while local_group:  # we keep asking for next group until the user types enter
             self.groups.append(local_group)
-            if local_group not in dict_of_groups:
-                dict_of_groups[local_group] = Group()
-            dict_of_groups[local_group].subjects[self.subject] = self
+            if local_group not in dict_of_elements:
+                dict_of_elements[local_group] = Group()
+            dict_of_elements[local_group].subjects[self.subject] = self
             local_group = input("Type next group: ")
 
     def add_person(self):
-        dict_of_teachers[self.name] = self
+        dict_of_elements[self.name] = self
 
 # first step - we enter the data
 
@@ -113,15 +108,5 @@ while True:
 print("Next action: type a name of a person (student, tutor or teacher) or a name of a class to get information.")
 phrase = input("Type person or group name: ")
 while phrase:
-    # print(f'Students: {dict_of_students}')
-    if phrase in dict_of_students:  # <student_name>: all subjects and their teachers
-        dict_of_students[phrase].print_info()
-    elif phrase in dict_of_tutors:  # <tutor_name>: students of all tutor's groups
-        print("tutor")
-        # chosen_object = dict_of_tutors[phrase]
-    elif phrase in dict_of_teachers:  # <teacher_name>: tutors of all classes, the teacher has classes with
-        # dict_of_teachers[phrase].print_teacher_info()
-        print('a teacher')
-    elif phrase in dict_of_groups:  # <group_name>: tutor and students
-        dict_of_groups[phrase].print_info()
-    phrase = input("Type person's name: ")
+    dict_of_elements[phrase].print_info()
+    phrase = input("Type person or group name: ")

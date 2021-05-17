@@ -5,11 +5,18 @@ student
 Basia
 1a
 student
+Nina
+1b
+student
 Piotrek
 1b
 student
 Paweł
 2c
+student
+Lena
+3a
+
 tutor
 Wanda
 1a
@@ -18,6 +25,7 @@ Wanda
 tutor
 Tomasz
 2c
+3a
 
 teacher
 Wiesław
@@ -26,6 +34,20 @@ historia
 1b
 2c
 
+teacher
+Magdalena
+biologia
+1a
+2c
+3a
+
+teacher
+Grzegorz
+informatyka
+1b
+2c
+3a
+
 stop
-Ania
+1b
 
