@@ -3,10 +3,10 @@ dict_of_elements = {}
 # classes for all our types of objects: roles and groups.
 
 
-class Group:  # school class: matching tutor is found in tutors' attributes, students are found in students' attr.
+class Group:
     def __init__(self):
         self.tutor = ''
-        self.students = []  # is it a list of objects of a class Student ?
+        self.students = []  # a list of objects of a class Student
         self.subjects = {}  # key - subject, value - teacher
 
     def add_student(self, new_student):  # new_student comes from input and it is an object of a class Student.
@@ -19,7 +19,7 @@ class Group:  # school class: matching tutor is found in tutors' attributes, stu
             print(student.name)
 
 
-class Student:  # student: group given by user, subject is found in teacher's attributes
+class Student:
     def __init__(self):
         self.group = ''
         self.name = ''
@@ -41,7 +41,7 @@ class Student:  # student: group given by user, subject is found in teacher's at
             print(subject, teacher.name)  # teacher is an object
 
 
-class Tutor:  # tutor: groups are given by the user, students will be found in group's attributes
+class Tutor:
     def __init__(self):
         self.name = ''
         self.groups = []
@@ -66,7 +66,7 @@ class Tutor:  # tutor: groups are given by the user, students will be found in g
                 print(student.name)
 
 
-class Teacher:  # teacher: subject and groups are given by the user, tutors are found in groups' attributes.
+class Teacher:
     def __init__(self):
         self.name = ''
         self.subject = ''
@@ -109,10 +109,7 @@ while True:
         person_object = Teacher()
     person_object.get_person_data()
     person_object.add_person()
-    # print(f'Students: {dict_of_students}')
-    # print(f'Teachers: {dict_of_teachers}')
-    # print(f'Tutors: {dict_of_tutors}')
-    # print(f'Groups: {dict_of_groups}')
+    # print(f'Dict: {dict_of_elements}')
 
 
 # step two
