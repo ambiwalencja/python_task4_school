@@ -59,6 +59,12 @@ class Tutor:  # tutor: groups are given by the user, students will be found in g
     def add_person(self):
         dict_of_elements[self.name] = self
 
+    def print_info(self):
+        for group in self.groups:
+            current_group = dict_of_elements[group]
+            for student in current_group.students:
+                print(student.name)
+
 
 class Teacher:  # teacher: subject and groups are given by the user, tutors are found in groups' attributes.
     def __init__(self):
@@ -79,6 +85,11 @@ class Teacher:  # teacher: subject and groups are given by the user, tutors are 
 
     def add_person(self):
         dict_of_elements[self.name] = self
+
+    def print_info(self):
+        for group in self.groups:
+            current_group = dict_of_elements[group]
+            print(current_group.tutor)
 
 # first step - we enter the data
 
